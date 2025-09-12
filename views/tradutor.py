@@ -15,7 +15,9 @@ def show():
             type="password"
         )
 
-        idioma = st.text_input("Idioma de destino", "Digite o idioma desejado (ex: Inglês, Espanhol, Francês, Italiano...)")
+        idioma = st.text_input("Idioma de destino",
+        placeholder="Digite o idioma desejado (ex: Inglês, Espanhol, Francês, Italiano...)"
+        )
         texto_usuario = st.text_area("Digite seu texto aqui")
         submit_tradutor = st.form_submit_button("Traduzir Texto")
 

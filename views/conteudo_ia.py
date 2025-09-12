@@ -13,15 +13,18 @@ def show():
     api_key = st.text_input("Digite sua chave da Groq", type="password")
 
     with st.form("conteudo_form"):
-        titulo = st.text_input("Título do Conteúdo")
-        tema = st.text_area("Tema/Assunto")
+        # Substituído título e tema por apenas um campo
+        pergunta = st.text_input(
+            "O que você quer saber?",
+            placeholder="Digite aqui sua pergunta ou assunto"
+        )
         gerar = st.form_submit_button("Gerar")
 
     if gerar:
         if not api_key:
             st.error("Você precisa informar a chave da Groq.")
-        elif not titulo.strip() or not tema.strip():
-            st.warning("Preencha o título e o tema.")
+        elif not pergunta.strip():
+            st.warning("Digite algo para gerar o conteúdo.")
         else:
             try:
                 # Inicializa o modelo ChatGroq
@@ -30,17 +33,17 @@ def show():
                     groq_api_key=api_key
                 )
 
-                # Prompt template
+                # Prompt template ajustado para usar apenas pergunta
                 prompt_template = ChatPromptTemplate.from_messages([
                     ("system", "Você é um professor especialista em educação."),
-                    ("user", "Crie um conteúdo didático sobre o tema: {tema}, com título: {titulo}.")
+                    ("user", "Crie um conteúdo didático sobre: {pergunta}.")
                 ])
 
                 # Conecta prompt ao modelo
                 chain = prompt_template | llm  # Aqui o LLM gera o texto
 
                 with st.spinner("Gerando conteúdo..."):
-                    resultado = chain.invoke({"titulo": titulo, "tema": tema})
+                    resultado = chain.invoke({"pergunta": pergunta})
                     resultado = limpar_resposta(resultado.content)
 
                 st.success("Conteúdo gerado com sucesso!")
