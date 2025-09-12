@@ -1,5 +1,8 @@
 class Conteudo:
-    def __init__(self, id, nome, data_upload):
+    def __init__(self, id, titulo, descricao):
         self.id = id
-        self.nome = nome
-        self.data_upload = data_upload
+        self.titulo = titulo
+        self.descricao = descricao
+
+    def __repr__(self):
+        return f"Conteudo({self.id}, {self.titulo}, {self.descricao})"
