@@ -1,24 +1,28 @@
 import streamlit as st
-from utils.db import init_db
-from views import analise_documentos, cadastro_estudantes, conteudo_ia, dashboard_escolar, tradutor
+from controllers.estudante_controller import init_db
 
+# ---------- INICIALIZAÇÃO DO BANCO ----------
+init_db()  # garante que a tabela 'estudante' exista antes de qualquer consulta
 
-# Inicializa o banco de dados
-init_db()
-#st.title("Projeto SofIA - 498")
+# ---------- TÍTULO PRINCIPAL ----------
 st.markdown(
     '<h1 style="color:black; font-size:75px;">Projeto SofIA - 498</h1>', 
     unsafe_allow_html=True
 )
 
+# ---------- IMPORTAÇÃO DAS ABAS DEPOIS DO TÍTULO ----------
+from views import analise_documentos, cadastro_estudantes, conteudo_ia, dashboard_escolar, tradutor
 
-# Menu de navegação
+# ---------- MENU DE NAVEGAÇÃO ----------
 st.sidebar.title("Menu")
-opcao = st.sidebar.radio("Categorias", ["Cadastro de Aluno", "Dashboard Escolar", "Análise de Documentos", "Conteúdo com IA", "Tradutor"])
+opcao = st.sidebar.radio(
+    "Categorias", 
+    ["Cadastro de Aluno", "Dashboard Escolar", "Análise de Documentos", "Conteúdo com IA", "Tradutor"]
+)
 
 if opcao == "Cadastro de Aluno":
     cadastro_estudantes.show()
-elif opcao == "Dashbard Escolar":
+elif opcao == "Dashboard Escolar":
     dashboard_escolar.show()
 elif opcao == "Análise de Documentos":
     analise_documentos.show()
@@ -26,8 +30,6 @@ elif opcao == "Conteúdo com IA":
     conteudo_ia.show()
 elif opcao == "Tradutor":
     tradutor.show()
-pass
-
 
 # ---------- DESIGN ----------
 page_bg = """
@@ -43,7 +45,7 @@ page_bg = """
         color: white;
     }
     
-    /* Título h1 (título principal) */
+    /* Título h1 (principal) */
     h1 {
         color: #6A329F;
     }
@@ -53,7 +55,7 @@ page_bg = """
         color: #6A0DAD;
     }
 
-    /* Texto padrão*/
+    /* Texto padrão */
     .stApp, .stApp p, .stApp div, .stApp span {
         color: #6A329F;
     }
