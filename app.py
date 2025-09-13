@@ -1,8 +1,11 @@
 import streamlit as st
 from controllers.estudante_controller import init_db
+from controllers.estudante_controller import init_db, atualizar_tabela
+
 
 # ---------- INICIALIZAÇÃO DO BANCO ----------
 init_db()  # garante que a tabela 'estudante' exista antes de qualquer consulta
+atualizar_tabela()
 
 # ---------- TÍTULO PRINCIPAL ----------
 st.markdown(
