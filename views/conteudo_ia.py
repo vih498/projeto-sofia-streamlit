@@ -7,7 +7,7 @@ def limpar_resposta(text: str) -> str:
     return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
 
 def show():
-    st.title("Geração de Conteúdo com IA")
+    st.title("Geração de Conteúdo com Groq")
 
     # Entrada da chave do usuário
     api_key = st.text_input("Digite sua chave da Groq", type="password")
