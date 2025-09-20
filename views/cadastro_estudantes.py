@@ -6,19 +6,15 @@ from controllers.estudante_controller import (
     deletar_estudante,
 )
 
-# ---------- FUNÇÃO PRINCIPAL ----------
 def show():
 
-# ---------- ABAS ----------
     aba_adicionar, aba_listar_alterar_eliminar = st.tabs(
         ["Adicionar Estudante", "Listar, Alterar ou Excluir Estudante"]
     )
 
-# ---------- ABA - adicionar ----------
     with aba_adicionar:
         st.subheader("Cadastro de Estudante")
 
-# ---------- Formulário de cadastro ----------
         with st.form("cadastro_form"):
             nome = st.text_input("Nome")
             sexo = st.selectbox("Sexo", ["Masculino", "Feminino"])
@@ -27,12 +23,10 @@ def show():
             nota2 = st.number_input("Nota 2", min_value=0.0, max_value=10.0, step=0.1)
             submitted = st.form_submit_button("Cadastrar")
 
-# ---------- Ação de submeter ----------
             if submitted:
                 adicionar_estudante(nome, sexo, matricula if matricula else None, nota1, nota2)
                 st.success("Estudante cadastrado com sucesso!")
 
-# ---------- Lista simples de nomes ----------
         st.subheader("Lista de Alunos")
         estudantes = listar_estudante()
         if estudantes:
@@ -41,7 +35,6 @@ def show():
         else:
             st.info("Nenhum estudante cadastrado.")
 
-# ---------- ABA - Listar, alterar ou excluir ----------
     with aba_listar_alterar_eliminar:
         st.subheader("Estudantes Cadastrados")
 
@@ -51,10 +44,8 @@ def show():
         else:
             for c in estudantes:
 
-# ---------- Função EXPANDER por estudante ----------
                 with st.expander(f"{c.nome} - Matrícula {c.matricula}"):
 
-# ---------- Campos de edição ----------
                     novo_nome = st.text_input(
                         f"Nome - ID {c.matricula}", value=c.nome, key=f"nome{c.matricula}"
                     )
@@ -75,7 +66,6 @@ def show():
                         key=f"nota2{c.matricula}"
                     )
 
-# ---------- Botões de ação ----------
                     col1, col2 = st.columns(2)
                     if col1.button("Atualizar", key=f"update{c.matricula}"):
                         atualizar_estudante(c.matricula, novo_nome, novo_sexo, nova_nota1, nova_nota2)

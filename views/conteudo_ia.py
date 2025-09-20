@@ -1,54 +1,44 @@
 import streamlit as st
+import re
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
-import re
+from views.login import check_login
 
 def limpar_resposta(text: str) -> str:
     return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
 
 def show():
-    st.title("Geração de Conteúdo com Groq")
+    check_login()
+    api_key = st.session_state.api_key
 
-    # Entrada da chave do usuário
-    api_key = st.text_input("Digite sua chave da Groq", type="password")
+    st.title("Geração de Conteúdo")
 
-    with st.form("conteudo_form"):
-        # Substituído título e tema por apenas um campo
-        pergunta = st.text_input(
-            "O que você quer saber?",
-            placeholder="Digite aqui sua pergunta ou assunto"
-        )
-        gerar = st.form_submit_button("Gerar")
+    pergunta = st.text_input(
+        "O que você quer saber?",
+        placeholder="Digite aqui sua pergunta ou assunto"
+    )
 
-    if gerar:
-        if not api_key:
-            st.error("Você precisa informar a chave da Groq.")
-        elif not pergunta.strip():
-            st.warning("Digite algo para gerar o conteúdo.")
-        else:
-            try:
-                # Inicializa o modelo ChatGroq
-                llm = ChatGroq(
-                    model="deepseek-r1-distill-llama-70b",
-                    groq_api_key=api_key
-                )
+    if pergunta.strip():
+        try:
+            llm = ChatGroq(
+                model="deepseek-r1-distill-llama-70b",
+                groq_api_key=api_key
+            )
 
-                # Prompt template ajustado para usar apenas pergunta
-                prompt_template = ChatPromptTemplate.from_messages([
-                    ("system", "Você é um professor especialista em educação."),
-                    ("user", "Crie um conteúdo didático sobre: {pergunta}.")
-                ])
+            prompt_template = ChatPromptTemplate.from_messages([
+                ("system", "Você é um professor especialista em educação."),
+                ("user", "Crie um conteúdo didático sobre: {pergunta}.")
+            ])
 
-                # Conecta prompt ao modelo
-                chain = prompt_template | llm  # Aqui o LLM gera o texto
+            chain = prompt_template | llm
 
-                with st.spinner("Gerando conteúdo..."):
-                    resultado = chain.invoke({"pergunta": pergunta})
-                    resultado = limpar_resposta(resultado.content)
+            with st.spinner("Gerando conteúdo..."):
+                resultado = chain.invoke({"pergunta": pergunta})
+                resultado = limpar_resposta(resultado.content)
 
-                st.success("Conteúdo gerado com sucesso!")
-                st.write("### Resultado")
-                st.write(resultado)
+            st.success("Conteúdo gerado com sucesso!")
+            st.write("### Resultado")
+            st.write(resultado)
 
-            except Exception as e:
-                st.error(f"Erro ao gerar conteúdo: {e}")
+        except Exception as e:
+            st.error(f"Erro ao gerar conteúdo: {e}")
