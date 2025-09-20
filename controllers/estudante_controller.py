@@ -2,14 +2,11 @@ from models.estudantes_model import Estudante
 import sqlite3
 import os
 
-# ---------- Definiçãoo do banco de dados ----------
 DB_NAME = os.path.join("data", "database.sqlite")
 
-# ---------- Conexão com o banco ----------
 def get_connection():
     return sqlite3.connect(DB_NAME)
 
-# ---------- Inicialização de banco e tabela ----------
 def init_db():
     conn = get_connection()
     cursor = conn.cursor()
@@ -23,7 +20,6 @@ def init_db():
     conn.commit()
     conn.close()
 
-# ---------- Atualização de tabela (novas colunas) ----------
 def atualizar_tabela():
     conn = get_connection()
     cursor = conn.cursor()
@@ -39,17 +35,14 @@ def atualizar_tabela():
         try:
             cursor.execute(f"ALTER TABLE estudante ADD COLUMN {coluna} {tipo}")
         except sqlite3.OperationalError:
-            # ignora se a coluna já existe
             pass
 
     conn.commit()
     conn.close()
 
-# ---------- Conexão alternativa ----------
 def conectar():
     return sqlite3.connect(DB_NAME)
 
-# ---------- Função para calcular média e status ----------
 def calcular_media_status(nota1, nota2):
     if nota1 is None: nota1 = 0
     if nota2 is None: nota2 = 0
@@ -62,7 +55,6 @@ def calcular_media_status(nota1, nota2):
         status = "Reprovado"
     return media, status
 
-# ---------- ADICIONAR ESTUDANTE ----------
 def adicionar_estudante(nome, sexo, matricula=None, nota1=None, nota2=None):
     media, status = calcular_media_status(nota1 or 0, nota2 or 0)
     conn = get_connection()
@@ -81,7 +73,6 @@ def adicionar_estudante(nome, sexo, matricula=None, nota1=None, nota2=None):
     conn.commit()
     conn.close()
 
-# ---------- LISTAR ESTUDANTE ----------
 def listar_estudante():
     conn = get_connection()
     cursor = conn.cursor()
@@ -90,7 +81,6 @@ def listar_estudante():
     conn.close()
     return [Estudante(*row) for row in rows]
 
-# ---------- ATUALIZAR ESTUDANTE ----------
 def atualizar_estudante(matricula, nome, sexo, nota1, nota2):
     media, status = calcular_media_status(nota1, nota2)
     conexao = conectar()
@@ -103,7 +93,6 @@ def atualizar_estudante(matricula, nome, sexo, nota1, nota2):
     conexao.commit()
     conexao.close()
 
-# ---------- DELETAR ESTUDANTE ----------
 def deletar_estudante(matricula):
     conexao = conectar()
     cursor = conexao.cursor()
