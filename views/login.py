@@ -18,7 +18,7 @@ def login():
 def check_login():
     """Protege páginas que precisam da API Key"""
     if "api_key" not in st.session_state or not st.session_state.api_key:
-        st.error("⚠️ Você precisa inserir sua chave da API Groq na tela de login.")
+        st.error("Você precisa inserir sua chave da API Groq na tela de login.")
         st.stop()
 
 st.markdown(
@@ -48,4 +48,5 @@ st.markdown(
     </style>
     """,
     unsafe_allow_html=True
+
 )
