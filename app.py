@@ -74,10 +74,11 @@ page_bg = """
         color: #6A329F;
     }
     div.stButton>button {
-        background-color: #6A329F !important;
+        background-color: #F0EAF5 !important;
         color: #FFFFFF !important;
         font-weight: bold;
     }
 </style>
 """
+
 st.markdown(page_bg, unsafe_allow_html=True)
